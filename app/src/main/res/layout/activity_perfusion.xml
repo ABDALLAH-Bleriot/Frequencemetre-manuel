@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_card_glass"
+        android:layout_margin="16dp"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Débit de Perfusion"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/text_white"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💉"
+            android:textSize="40sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="2dp"
+            android:background="@color/blue_gradient_end"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Volume :"
+                android:textSize="17sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/text_gray" />
+            <EditText
+                android:id="@+id/etVolume"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/bg_input"
+                android:padding="14dp"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:gravity="end"
+                android:textColor="@color/text_white"
+                android:textColorHint="@color/text_dim"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" ml"
+                android:textSize="17sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/text_gray"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Durée :"
+                android:textSize="17sp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/text_gray" />
+            <EditText
+                android:id="@+id/etDuree"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/bg_input"
+                android:padding="14dp"
+                android:hint="0"
+                android:inputType="numberDecimal"
+                android:gravity="end"
+                android:textColor="@color/text_white"
+                android:textColorHint="@color/text_dim"
+                android:textSize="16sp" />
+            <RadioGroup
+                android:id="@+id/rgUnite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp">
+                <RadioButton
+                    android:id="@+id/rbHeures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Heures"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/text_white"
+                    android:buttonTint="@color/blue_gradient_end"
+                    android:checked="true" />
+                <RadioButton
+                    android:id="@+id/rbMinutes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minutes"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/text_white"
+                    android:buttonTint="@color/blue_gradient_end"
+                    android:layout_marginStart="6dp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp" />
+
+        <Button
+            android:id="@+id/btnCalculer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Calculer"
+            android:textColor="@color/text_white"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins_semibold"
+            android:background="@drawable/bg_button_gradient" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="14dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Débit :"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/text_white"
+            android:layout_marginBottom="10dp" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ml / h : " android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+            <TextView android:id="@+id/tvDebit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gouttes / mn : " android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+            <TextView android:id="@+id/tvGouttesMin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gouttes / sec. : " android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+            <TextView android:id="@+id/tvGouttesSec" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gouttes / 10 sec. : " android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+            <TextView android:id="@+id/tvGouttes10Sec" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interprétation :"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/text_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ce calculateur permet de calculer le débit de perfusion d'une base. Les perfuseurs sont calibrés pour avoir 20 gouttes par ml."
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/text_dim"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Références :"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/text_white"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Formule: Deb (ml/h) = Volume / Temps. 1 ml = 20 gouttes."
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/text_dim"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+</ScrollView>
