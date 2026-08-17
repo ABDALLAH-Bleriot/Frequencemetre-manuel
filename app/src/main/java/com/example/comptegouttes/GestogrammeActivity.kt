@@ -21,11 +21,12 @@ import java.util.Locale
 class GestogrammeActivity : AppCompatActivity() {
 
     private lateinit var swipe: GestureDetector
-    private lateinit var etDate: EditText
+    private lateinit var etJour: EditText
+    private lateinit var etMois: EditText
+    private lateinit var etAnnee: EditText
     private lateinit var etEchoSA: EditText
     private lateinit var etEchoJ: EditText
     private lateinit var rgMode: RadioGroup
-    private var formatting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,35 +36,29 @@ class GestogrammeActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
-        etDate = findViewById(R.id.etDate)
+        etJour = findViewById(R.id.etJour)
+        etMois = findViewById(R.id.etMois)
+        etAnnee = findViewById(R.id.etAnnee)
         etEchoSA = findViewById(R.id.etEchoSA)
         etEchoJ = findViewById(R.id.etEchoJ)
         rgMode = findViewById(R.id.rgMode)
 
-        // Saisie facilitée : les barres / / s'ajoutent toutes seules
-        etDate.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (formatting || s == null) return
-                val digits = s.toString().replace(Regex("\\D"), "").take(8)
-                val sb = StringBuilder()
-                for (i in digits.indices) {
-                    if (i == 2 || i == 4) sb.append('/')
-                    sb.append(digits[i])
-                }
-                val formatted = sb.toString()
-                if (formatted != s.toString()) {
-                    formatting = true
-                    s.clear()
-                    s.append(formatted)
-                    formatting = false
-                }
-            }
-        })
+        // Le curseur saute tout seul : jj -> mm -> aaaa
+        autoNext(etJour, etMois)
+        autoNext(etMois, etAnnee)
 
         findViewById<Button>(R.id.btnCalendar).setOnClickListener { openCalendar() }
         findViewById<Button>(R.id.btnCalculerGesto).setOnClickListener { calculer() }
+    }
+
+    private fun autoNext(source: EditText, next: EditText) {
+        source.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 2) next.requestFocus()
+            }
+        })
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -74,14 +69,24 @@ class GestogrammeActivity : AppCompatActivity() {
     private fun openCalendar() {
         val c = Calendar.getInstance()
         DatePickerDialog(this, { _, year, month, day ->
-            etDate.setText(String.format(Locale.FRANCE, "%02d/%02d/%04d", day, month + 1, year))
+            etJour.setText(String.format(Locale.FRANCE, "%02d", day))
+            etMois.setText(String.format(Locale.FRANCE, "%02d", month + 1))
+            etAnnee.setText(String.format(Locale.FRANCE, "%04d", year))
         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
     }
 
-    private fun parseDate(s: String): Date? {
-        val f = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
-        f.isLenient = false
-        return try { f.parse(s.trim()) } catch (e: Exception) { null }
+    private fun lireDate(): Date? {
+        val j = etJour.text.toString().trim()
+        val m = etMois.text.toString().trim()
+        val a = etAnnee.text.toString().trim()
+        if (j.length != 2 || m.length != 2 || a.length != 4) return null
+        return try {
+            val f = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+            f.isLenient = false
+            f.parse("$j/$m/$a")
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun fmt(d: Date): String = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(d)
@@ -89,9 +94,9 @@ class GestogrammeActivity : AppCompatActivity() {
     private fun addDays(d: Date, days: Int): Date = Date(d.time + days * 86400000L)
 
     private fun calculer() {
-        val date = parseDate(etDate.text.toString())
+        val date = lireDate()
         if (date == null) {
-            Toast.makeText(this, "Date invalide. Format : jj/mm/aaaa", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Date invalide. Remplissez jj / mm / aaaa", Toast.LENGTH_SHORT).show()
             return
         }
 
