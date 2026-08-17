@@ -1,8 +1,11 @@
 package com.example.comptegouttes
 
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
@@ -11,9 +14,15 @@ import java.util.Locale
 
 class PerfusionActivity : AppCompatActivity() {
 
+    private lateinit var swipe: GestureDetector
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfusion)
+        setupBottomNav("calc")
+        swipe = SwipeNav.create(this, "calc")
+
+        findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
         val etVolume = findViewById<EditText>(R.id.etVolume)
         val etDuree = findViewById<EditText>(R.id.etDuree)
@@ -51,6 +60,11 @@ class PerfusionActivity : AppCompatActivity() {
             tvGouttesSec.text = String.format(Locale.FRANCE, "%.2f", gouttesSec)
             tvGouttes10Sec.text = String.format(Locale.FRANCE, "%.2f", gouttes10Sec)
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun num(et: EditText): Double? =
