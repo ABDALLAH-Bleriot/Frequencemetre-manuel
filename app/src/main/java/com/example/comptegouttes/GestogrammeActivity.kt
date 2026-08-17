@@ -2,6 +2,10 @@ package com.example.comptegouttes
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -16,14 +20,18 @@ import java.util.Locale
 
 class GestogrammeActivity : AppCompatActivity() {
 
+    private lateinit var swipe: GestureDetector
     private lateinit var etDate: EditText
     private lateinit var etEchoSA: EditText
     private lateinit var etEchoJ: EditText
     private lateinit var rgMode: RadioGroup
+    private var formatting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gestogramme)
+        setupBottomNav("calc")
+        swipe = SwipeNav.create(this, "calc")
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
@@ -32,8 +40,35 @@ class GestogrammeActivity : AppCompatActivity() {
         etEchoJ = findViewById(R.id.etEchoJ)
         rgMode = findViewById(R.id.rgMode)
 
+        // Saisie facilitée : les barres / / s'ajoutent toutes seules
+        etDate.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (formatting || s == null) return
+                val digits = s.toString().replace(Regex("\\D"), "").take(8)
+                val sb = StringBuilder()
+                for (i in digits.indices) {
+                    if (i == 2 || i == 4) sb.append('/')
+                    sb.append(digits[i])
+                }
+                val formatted = sb.toString()
+                if (formatted != s.toString()) {
+                    formatting = true
+                    s.clear()
+                    s.append(formatted)
+                    formatting = false
+                }
+            }
+        })
+
         findViewById<Button>(R.id.btnCalendar).setOnClickListener { openCalendar() }
         findViewById<Button>(R.id.btnCalculerGesto).setOnClickListener { calculer() }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun openCalendar() {
@@ -44,16 +79,9 @@ class GestogrammeActivity : AppCompatActivity() {
     }
 
     private fun parseDate(s: String): Date? {
-        for (pattern in listOf("dd/MM/yyyy", "yyyy-MM-dd")) {
-            val f = SimpleDateFormat(pattern, Locale.FRANCE)
-            f.isLenient = false
-            try {
-                val d = f.parse(s.trim())
-                if (d != null) return d
-            } catch (_: Exception) {
-            }
-        }
-        return null
+        val f = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+        f.isLenient = false
+        return try { f.parse(s.trim()) } catch (e: Exception) { null }
     }
 
     private fun fmt(d: Date): String = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(d)
