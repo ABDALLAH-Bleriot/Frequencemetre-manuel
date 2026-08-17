@@ -62,6 +62,9 @@ class GeneratorActivity : AppCompatActivity() {
         btnPlay = findViewById(R.id.btnPlay)
         btnStop = findViewById(R.id.btnStop)
 
+        btnPlay.setBackgroundResource(R.drawable.bg_neon_button_selector)
+        btnStop.setBackgroundResource(R.drawable.bg_neon_button_selector)
+
         etFreq.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
             override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
@@ -81,6 +84,12 @@ class GeneratorActivity : AppCompatActivity() {
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         swipe.onTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
+    }
+
+    /** Clignotement lumineux du bouton à chaque appui. */
+    private fun flashButton(b: ImageButton) {
+        b.setBackgroundResource(R.drawable.bg_neon_button_lit)
+        handler.postDelayed({ b.setBackgroundResource(R.drawable.bg_neon_button_selector) }, 200)
     }
 
     private fun periodMs(): Long = 60000L / frequency.coerceAtLeast(1)
@@ -120,6 +129,7 @@ class GeneratorActivity : AppCompatActivity() {
             Toast.makeText(this, "Réglez d'abord la fréquence (événements/min)", Toast.LENGTH_SHORT).show()
             return
         }
+        flashButton(btnPlay)
         running = true
         eventCount = 0
         tvEvents.text = "0 événements"
@@ -132,6 +142,7 @@ class GeneratorActivity : AppCompatActivity() {
 
     private fun stop() {
         if (!running) return
+        flashButton(btnStop)
         running = false
         animator?.cancel()
         animator = null
