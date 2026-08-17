@@ -9,6 +9,8 @@ import android.os.Looper
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -19,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
 
 class GeneratorActivity : AppCompatActivity() {
+
+    private lateinit var swipe: GestureDetector
 
     private val handler = Handler(Looper.getMainLooper())
     private var frequency = 0
@@ -47,6 +51,7 @@ class GeneratorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_generator)
         setupBottomNav("generator")
+        swipe = SwipeNav.create(this, "generator")
         SoundPlayer.init(this)
 
         etFreq = findViewById(R.id.etFreq)
@@ -73,6 +78,11 @@ class GeneratorActivity : AppCompatActivity() {
         tvChrono.text = formatElapsed(0)
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
+    }
+
     private fun periodMs(): Long = 60000L / frequency.coerceAtLeast(1)
 
     private fun setFrequency(value: Int, source: String) {
@@ -85,7 +95,6 @@ class GeneratorActivity : AppCompatActivity() {
         if (running) startBar()
     }
 
-    /** Le trait part de GAUCHE et va vers la DROITE. */
     private fun startBar() {
         animator?.cancel()
         val a = ValueAnimator.ofFloat(0f, 1f)
@@ -116,7 +125,6 @@ class GeneratorActivity : AppCompatActivity() {
         tvEvents.text = "0 événements"
         chronoStart = SystemClock.elapsedRealtime()
         tvChrono.text = formatElapsed(0)
-        // PAS d'événement au départ : le 1er arrive après 1 période complète.
         startBar()
         handler.removeCallbacks(chronoTicker)
         handler.post(chronoTicker)
