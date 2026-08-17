@@ -15,8 +15,11 @@ fun Activity.setupBottomNav(currentScreen: String) {
     for ((id, screen) in navButtons) {
         val button = findViewById<View>(id)
         if (screen == currentScreen) {
-            button.alpha = 0.35f
+            button.alpha = 1f
+            button.setBackgroundResource(R.drawable.bg_neon_nav_selected)
         } else {
+            button.alpha = 0.55f
+            button.setBackgroundResource(R.drawable.bg_neon_nav)
             button.setOnClickListener {
                 val target = when (screen) {
                     "counter" -> MainActivity::class.java
