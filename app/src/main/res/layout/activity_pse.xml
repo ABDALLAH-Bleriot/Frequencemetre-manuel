@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_screen"
+    android:keepScreenOn="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_glass"
+            android:layout_margin="16dp"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_arrow_back"
+                    android:contentDescription="Retour"
+                    android:layout_marginEnd="12dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Débit P.S.E. pour drogue vasoactive"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/text_white" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💉"
+                android:textSize="36sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="2dp"
+                android:background="@color/blue_gradient_end"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Débit drogue voulu :" android:textSize="15sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <EditText android:id="@+id/etDebitVoulu" android:layout_width="100dp" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:padding="12dp" android:hint="0" android:inputType="numberDecimal" android:gravity="center" android:textColor="@color/text_white" android:textColorHint="@color/text_dim" android:textSize="15sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" µg/kg/min" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Poids patient :" android:textSize="15sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <EditText android:id="@+id/etPoids" android:layout_width="100dp" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:padding="12dp" android:hint="0" android:inputType="numberDecimal" android:gravity="center" android:textColor="@color/text_white" android:textColorHint="@color/text_dim" android:textSize="15sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" kg" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Dose seringue :" android:textSize="15sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <EditText android:id="@+id/etDose" android:layout_width="100dp" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:padding="12dp" android:hint="0" android:inputType="numberDecimal" android:gravity="center" android:textColor="@color/text_white" android:textColorHint="@color/text_dim" android:textSize="15sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" mg" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Volume seringue :" android:textSize="15sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <EditText android:id="@+id/etVolumeSeringue" android:layout_width="100dp" android:layout_height="wrap_content" android:background="@drawable/bg_input" android:padding="12dp" android:hint="0" android:inputType="numberDecimal" android:gravity="center" android:textColor="@color/text_white" android:textColorHint="@color/text_dim" android:textSize="15sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" ml" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border" android:layout_marginTop="18dp" android:layout_marginBottom="18dp" />
+
+            <Button
+                android:id="@+id/btnCalculerPse"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Calculer"
+                android:textColor="@color/text_white"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins_semibold"
+                android:background="@drawable/bg_button_gradient" />
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border" android:layout_marginTop="18dp" android:layout_marginBottom="14dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Résultats :" android:textSize="19sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/text_white" android:layout_marginBottom="10dp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Débit P.S.E. :" android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <TextView android:id="@+id/tvDebitPSE" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" ml/h" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Débit drogue :" android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <TextView android:id="@+id/tvDebitDrogue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=" mg/h" android:textSize="13sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Autonomie :" android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <TextView android:id="@+id/tvAutonomie" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 h 00 min" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="6dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Gouttes / min :" android:textSize="16sp" android:fontFamily="@font/poppins" android:textColor="@color/text_gray" />
+                <TextView android:id="@+id/tvGouttesMinPse" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0,00" android:textSize="16sp" android:textStyle="bold" android:fontFamily="@font/poppins_semibold" android:textColor="@color/blue_gradient_end" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border" android:layout_marginTop="16dp" android:layout_marginBottom="12dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Interprétation :" android:textStyle="bold" android:textSize="14sp" android:fontFamily="@font/poppins_semibold" android:textColor="@color/text_white" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ce calculateur permet de calculer le débit d'un pousse-seringue électrique de drogue vasoactive (dobutamine, dopamine) en fonction du poids du patient et de la dilution utilisée." android:textSize="12sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginTop="4dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Références :" android:textStyle="bold" android:textSize="14sp" android:fontFamily="@font/poppins_semibold" android:textColor="@color/text_white" android:layout_marginTop="12dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Formule: Deb (ml/h) = (Débit voulu x Poids x Volume seringue x 60) / (Dose seringue x 1000)." android:textSize="12sp" android:fontFamily="@font/poppins" android:textColor="@color/text_dim" android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        layout="@layout/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
