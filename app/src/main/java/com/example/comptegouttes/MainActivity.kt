@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,8 @@ import java.util.ArrayDeque
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var swipe: GestureDetector
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -45,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupBottomNav("counter")
+        swipe = SwipeNav.create(this, "counter")
         SoundPlayer.init(this)
 
         tvResult = findViewById(R.id.tvResult)
@@ -70,6 +75,11 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(ticker)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun onTap() {
