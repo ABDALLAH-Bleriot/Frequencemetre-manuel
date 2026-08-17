@@ -3,6 +3,8 @@ package com.example.comptegouttes
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +12,13 @@ import java.util.Locale
 
 class CalcActivity : AppCompatActivity() {
 
+    private lateinit var swipe: GestureDetector
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calc)
         setupBottomNav("calc")
+        swipe = SwipeNav.create(this, "calc")
 
         val container = findViewById<LinearLayout>(R.id.calcList)
 
@@ -42,6 +47,11 @@ class CalcActivity : AppCompatActivity() {
                 startActivity(Intent(this, target).putExtra("calc_id", def.id))
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
