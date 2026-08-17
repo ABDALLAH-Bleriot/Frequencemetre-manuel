@@ -1,6 +1,8 @@
 package com.example.comptegouttes
 
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -11,9 +13,13 @@ import java.util.Locale
 
 class PseActivity : AppCompatActivity() {
 
+    private lateinit var swipe: GestureDetector
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pse)
+        setupBottomNav("calc")
+        swipe = SwipeNav.create(this, "calc")
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
@@ -55,6 +61,11 @@ class PseActivity : AppCompatActivity() {
             tvAutonomie.text = String.format(Locale.FRANCE, "%d h %02d min", heures, minutes)
             tvGouttesMin.text = String.format(Locale.FRANCE, "%.2f", gouttesMin)
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        swipe.onTouchEvent(ev)
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun num(et: EditText): Double? =
