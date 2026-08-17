@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         btnTap = findViewById(R.id.btnTap)
         btnReset = findViewById(R.id.btnReset)
 
+        btnTap.setBackgroundResource(R.drawable.bg_neon_button_selector)
+
         btnTap.setOnClickListener { onTap() }
         btnReset.setOnClickListener { resetAll() }
 
@@ -82,9 +84,17 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
+    /** Clignotement lumineux du bouton à chaque appui. */
+    private fun flashButton(b: ImageButton) {
+        b.setBackgroundResource(R.drawable.bg_neon_button_lit)
+        handler.postDelayed({ b.setBackgroundResource(R.drawable.bg_neon_button_selector) }, 180)
+    }
+
     private fun onTap() {
         val now = SystemClock.elapsedRealtime()
         if (lastTap != 0L && now - lastTap < minIntervalMs) return
+
+        flashButton(btnTap)
 
         if (!chronometerRunning) {
             chronometerStart = now
