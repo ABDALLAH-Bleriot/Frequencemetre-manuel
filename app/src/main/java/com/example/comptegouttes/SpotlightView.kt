@@ -3,6 +3,7 @@ package com.example.comptegouttes
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -21,32 +22,24 @@ class SpotlightView(context: Context, private val target: View?) : View(context)
         super.onDraw(canvas)
         val hole = targetRect()
 
-        // Fond sombre TRES transparent pour bien voir l'interface
+        // Fond sombre léger (on voit bien l'interface derrière)
         paint.style = Paint.Style.FILL
         paint.color = Color.parseColor("#4D090E22")
+        paint.pathEffect = null
         path.rewind()
         path.fillType = Path.FillType.EVEN_ODD
         path.addRect(0f, 0f, width.toFloat(), height.toFloat(), Path.Direction.CW)
-        if (hole != null) path.addRoundRect(hole, 28f, 28f, Path.Direction.CW)
+        if (hole != null) path.addRoundRect(hole, 24f, 24f, Path.Direction.CW)
         canvas.drawPath(path, paint)
 
         if (hole != null) {
-            // Cadre cyan lumineux autour du bouton
+            // Bordure BLANCHE en pointillés (tiré-tiré) autour du bouton
             paint.style = Paint.Style.STROKE
-            paint.color = Color.parseColor("#35DFFF")
-            paint.strokeWidth = 6f
-            canvas.drawRoundRect(hole, 28f, 28f, paint)
-
-            // Flèche qui montre le bouton
-            paint.style = Paint.Style.FILL
-            paint.color = Color.parseColor("#35DFFF")
-            paint.textSize = 70f
-            paint.textAlign = Paint.Align.CENTER
-            if (hole.centerY() > height / 2f) {
-                canvas.drawText("▲", hole.centerX(), hole.top - 10f, paint)
-            } else {
-                canvas.drawText("▼", hole.centerX(), hole.bottom + 70f, paint)
-            }
+            paint.color = Color.WHITE
+            paint.strokeWidth = 7f
+            paint.pathEffect = DashPathEffect(floatArrayOf(24f, 14f), 0f)
+            canvas.drawRoundRect(hole, 24f, 24f, paint)
+            paint.pathEffect = null
         }
     }
 
