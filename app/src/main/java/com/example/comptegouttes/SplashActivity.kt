@@ -15,11 +15,11 @@ class SplashActivity : AppCompatActivity() {
         val firstRun = prefs.getBoolean("first_run", true)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
             if (firstRun) {
                 prefs.edit().putBoolean("first_run", false).apply()
-                startActivity(Intent(this, TutorialActivity::class.java))
+                TutoManager.begin()
             }
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }, 2500)
     }
