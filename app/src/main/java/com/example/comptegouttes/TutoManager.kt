@@ -73,7 +73,7 @@ object TutoManager {
         tv.text = step.text
         tv.setTextColor(Color.parseColor("#555555"))
         tv.textSize = 16f
-        tv.lineSpacingExtra = dp(activity, 4).toFloat()
+        tv.setLineSpacing(dp(activity, 4).toFloat(), 1f)   // <-- ligne corrigée
         card.addView(tv)
 
         val row = LinearLayout(activity)
@@ -134,7 +134,7 @@ object TutoManager {
 
         card.addView(row)
 
-        // Placement : centrée si demandé (étape 8/10) ou si pas de cible,
+        // Placement : centrée si demandé (étape 8/10) ou sans cible,
         // sinon au-dessus / en dessous du bouton sans jamais le cacher
         val content = activity.findViewById<View>(android.R.id.content)
         val params = FrameLayout.LayoutParams(
