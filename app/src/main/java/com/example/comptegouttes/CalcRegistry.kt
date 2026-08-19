@@ -73,6 +73,27 @@ object CalcRegistry {
         ),
 
         CalcDef(
+            id = "transfusion",
+            title = "Débit de transfusion",
+            fields = listOf(
+                FieldDef("volume", "Volume à transfuser (mL)"),
+                FieldDef("duree", "Durée (heures)")
+            ),
+            compute = { v ->
+                val vol = num(v["volume"])
+                val dur = num(v["duree"])
+                if (vol == null || dur == null || dur <= 0.0)
+                    "Entrez des valeurs valides (> 0)."
+                else {
+                    val mlh = vol / dur
+                    val gtt = vol * 15.0 / (dur * 60.0)
+                    String.format(Locale.FRANCE, "≈ %.1f mL/h\n≈ %.1f gtt/min (min⁻¹)", mlh, gtt)
+                }
+            },
+            customActivity = TransfusionActivity::class.java
+        ),
+
+        CalcDef(
             id = "gestogramme",
             title = "Gestogramme",
             fields = listOf(
@@ -102,6 +123,14 @@ object CalcRegistry {
                 }
             },
             customActivity = GestogrammeActivity::class.java
+        ),
+
+        CalcDef(
+            id = "glasgow",
+            title = "Score de Glasgow",
+            fields = listOf(),
+            compute = { "" },
+            customActivity = GlasgowActivity::class.java
         )
     )
 
