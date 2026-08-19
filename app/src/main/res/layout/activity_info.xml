@@ -63,7 +63,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Compter manuellement une fréquence à l'aide d'appuis successifs sur l'écran.\n\nCalculer le débit d'une perfusion en gouttes par minute.\n\nCalculer la fréquence respiratoire en cycles par minute.\n\nCalculer la fréquence cardiaque en battements par minute.\n\nServir de repère rythmique lors de la réanimation cardio-pulmonaire (RCP).\n\nUtiliser un gestogramme pour faciliter le suivi et le calcul des dates importantes de la grossesse.\n\nUtiliser un générateur de fréquence avec signal visuel et sonore pour servir de référence lors du comptage."
+                android:text="• Compter manuellement une fréquence à l'aide d'appuis successifs sur l'écran, avec résultat toujours affiché (ex : 1 appui /min, 1 appui / 2 min, 10 appuis /min).\n\n• Calculer la fréquence respiratoire en cycles par minute.\n\n• Calculer la fréquence cardiaque en battements par minute.\n\n• Servir de repère rythmique lors de la réanimation cardio-pulmonaire (RCP).\n\n• Utiliser un générateur de fréquence avec signal visuel (barre animée) et sonore (tic) pour servir de référence lors du comptage."
+                android:textSize="13sp"
+                android:textColor="@color/text_gray"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="14dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Calculs automatiques intégrés :"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_gray"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Débit de perfusion (perfuseur : 20 gouttes/mL).\n\n• Débit de P.S.E. pour drogue vasoactive (µg/kg/min).\n\n• Débit de transfusion (transfuseur : 15 gouttes/mL).\n\n• Gestogramme (suivi et dates importantes de la grossesse).\n\n• Score de Glasgow (yeux, verbale, motrice)."
                 android:textSize="13sp"
                 android:textColor="@color/text_gray"
                 android:lineSpacingExtra="4dp"
@@ -103,7 +121,6 @@
                 android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Téléphone -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,7 +149,6 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp" />
 
-            <!-- Email -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,7 +168,6 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp" />
 
-            <!-- Facebook -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,7 +187,6 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp" />
 
-            <!-- GitHub -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
