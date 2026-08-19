@@ -27,7 +27,6 @@
         <activity android:name=".TransfusionActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".GestogrammeActivity" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".GlasgowActivity" android:exported="false" android:screenOrientation="portrait" />
-        <activity android:name=".TutorialActivity" android:exported="false" android:screenOrientation="portrait" android:theme="@style/Theme.Tutorial" />
 
     </application>
 </manifest>
