@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     private var chronometerStart = 0L
     private var chronometerRunning = false
-    private var pauseMessageShown = false
 
     private val intervals = ArrayDeque<Long>()
     private var totalTaps = 0
@@ -35,8 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private val maxIntervals = 3
     private val minIntervalMs = 120L
-    private val maxIntervalMs = 15000L
-    private val staleAfterMs = maxIntervalMs + 3000L
+    private val maxIntervalMs = 120000L
 
     private lateinit var tvResult: TextView
     private lateinit var tvUnit: TextView
@@ -84,7 +82,6 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    /** Clignotement lumineux du bouton à chaque appui. */
     private fun flashButton(b: ImageButton) {
         b.setBackgroundResource(R.drawable.bg_neon_button_lit)
         handler.postDelayed({ b.setBackgroundResource(R.drawable.bg_neon_button_selector) }, 180)
@@ -114,34 +111,56 @@ class MainActivity : AppCompatActivity() {
 
         lastTap = now
         totalTaps++
-        pauseMessageShown = false
         SoundPlayer.play()
 
-        computeAndShowRate()
+        updateDisplay()
         tvInfo.text = getInfoText()
-    }
-
-    private fun computeAndShowRate() {
-        if (intervals.isEmpty()) { tvResult.text = "—"; return }
-        var sum = 0L
-        for (value in intervals) sum += value
-        val averageInterval = sum.toDouble() / intervals.size
-        if (averageInterval <= 0.0) { tvResult.text = "—"; return }
-        val rate = 60000.0 / averageInterval
-        tvResult.text = Math.round(rate).toString()
     }
 
     private fun updateChronometerAndState() {
         if (!chronometerRunning) return
         val now = SystemClock.elapsedRealtime()
         tvChronometer.text = formatElapsed(now - chronometerStart)
-        if (lastTap != 0L && now - lastTap > staleAfterMs) {
-            if (!pauseMessageShown) {
-                intervals.clear()
-                tvResult.text = "—"
-                tvInfo.text = "En pause"
-                pauseMessageShown = true
+        updateDisplay()
+    }
+
+    /** Affiche TOUJOURS un résultat, même avec un seul appui ou des appuis très espacés. */
+    private fun updateDisplay() {
+        if (totalTaps == 0) {
+            tvResult.text = "—"
+            tvUnit.text = "appuis /min"
+            return
+        }
+
+        val now = SystemClock.elapsedRealtime()
+        val elapsedMs = now - chronometerStart
+
+        // 1) Rythme mesuré entre les appuis (si au moins 2 appuis récents)
+        var rate: Double? = null
+        if (intervals.isNotEmpty() && now - lastTap <= 60000L) {
+            var sum = 0L
+            for (v in intervals) sum += v
+            rate = 60000.0 / (sum.toDouble() / intervals.size)
+        }
+
+        // 2) Sinon : moyenne globale depuis le 1er appui
+        if (rate == null) {
+            if (totalTaps == 1 && elapsedMs < 60000L) {
+                tvResult.text = "1"
+                tvUnit.text = "appui /min"
+                return
             }
+            val elapsedMin = Math.max(elapsedMs, 1000L) / 60000.0
+            rate = totalTaps / elapsedMin
+        }
+
+        // Format du résultat
+        if (rate >= 1.0) {
+            tvResult.text = Math.round(rate).toString()
+            tvUnit.text = "appuis /min"
+        } else {
+            tvResult.text = "1"
+            tvUnit.text = "appui / " + Math.max(1L, Math.round(1.0 / rate)) + " min"
         }
     }
 
@@ -156,7 +175,7 @@ class MainActivity : AppCompatActivity() {
     private fun getInfoText(): String {
         return when {
             totalTaps == 0 -> "Appuyez sur le bouton en rythme"
-            totalTaps == 1 -> "Encore 1 appui pour calculer"
+            totalTaps == 1 -> "Encore 1 appui pour le rythme"
             else -> "$totalTaps appuis"
         }
     }
@@ -168,9 +187,9 @@ class MainActivity : AppCompatActivity() {
         lastTap = 0L
         totalTaps = 0
         intervals.clear()
-        pauseMessageShown = false
         tvChronometer.text = formatElapsed(0L)
         tvResult.text = "—"
+        tvUnit.text = "appuis /min"
         tvInfo.text = getInfoText()
     }
 
