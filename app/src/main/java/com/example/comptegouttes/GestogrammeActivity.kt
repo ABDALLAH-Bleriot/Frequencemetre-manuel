@@ -43,7 +43,6 @@ class GestogrammeActivity : AppCompatActivity() {
         etEchoJ = findViewById(R.id.etEchoJ)
         rgMode = findViewById(R.id.rgMode)
 
-        // Le curseur saute tout seul : jj -> mm -> aaaa
         autoNext(etJour, etMois)
         autoNext(etMois, etAnnee)
 
@@ -116,8 +115,12 @@ class GestogrammeActivity : AppCompatActivity() {
         set(R.id.tvRegles, fmt(ddr))
         set(R.id.tvConception, fmt(addDays(ddr, 14)))
         set(R.id.tvTerme, fmt(addDays(ddr, 280)) + " (± 5 j)")
+
+        // TERMES ACTUEL : TOUJOURS affiché, même au-delà de la norme (46 SA, 56 SA...)
         set(R.id.tvTermeActuel,
-            if (daysToday in 0..308) "${daysToday / 7} SA + ${daysToday % 7} j" else "—")
+            if (daysToday < 0) "0 SA + 0 j (date future)"
+            else "${daysToday / 7} SA + ${daysToday % 7} j")
+
         set(R.id.tvPostTerme, fmt(addDays(ddr, 294)))
 
         set(R.id.tvEcho1, "du ${fmt(addDays(ddr, 77))} au ${fmt(addDays(ddr, 97))}")
