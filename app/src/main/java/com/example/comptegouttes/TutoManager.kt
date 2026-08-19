@@ -3,6 +3,7 @@ package com.example.comptegouttes
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -20,16 +21,16 @@ object TutoManager {
     data class Step(val screen: String, val targetId: Int?, val text: String, val goTo: String? = null)
 
     private val steps = listOf(
-        Step("counter", R.id.btnTap, "1/10 — Voici le bouton APPUYER ICI : touchez-le en rythme pour compter. Le résultat s'affiche toujours (ex : 1 appui /min, 1 appui / 2 min)."),
-        Step("counter", R.id.btnReset, "2/10 — RÉINITIALISER remet le compteur et le chronomètre à zéro."),
-        Step("counter", R.id.btnNavGenerator, "3/10 — Ce bouton ouvre le Générateur de fréquence. Touchez CONTINUER : l'application y va toute seule.", "generator"),
-        Step("generator", R.id.etFreq, "4/10 — Tapez ici la fréquence voulue, par exemple 60 événements/min."),
-        Step("generator", R.id.btnPlay, "5/10 — ▶ démarre : la barre bleue glisse de gauche à droite avec un tic sonore à chaque événement."),
-        Step("generator", R.id.btnStop, "6/10 — ⬜ arrête le générateur et fige le chronomètre."),
-        Step("generator", R.id.btnNavCalc, "7/10 — Ce bouton ouvre les Calculs automatiques. Touchez CONTINUER pour y aller.", "calc"),
-        Step("calc", R.id.calcList, "8/10 — Voici la liste des calculs : Débit de perfusion, Débit de P.S.E., Débit de transfusion, Gestogramme, Score de Glasgow. Touchez un bouton pour ouvrir."),
-        Step("calc", R.id.btnNavInfo, "9/10 — Ce bouton ouvre les Informations. Touchez CONTINUER pour y aller.", "info"),
-        Step("info", null, "10/10 — Ici : toutes les fonctionnalités et les contacts cliquables de l'auteur (téléphone, e-mail, Facebook, GitHub). Tutoriel terminé !")
+        Step("counter", R.id.btnTap, "Voici le bouton APPUYER ICI : touchez-le en rythme pour compter. Le résultat s'affiche toujours (ex : 1 appui /min, 1 appui / 2 min)."),
+        Step("counter", R.id.btnReset, "RÉINITIALISER remet le compteur et le chronomètre à zéro."),
+        Step("counter", R.id.btnNavGenerator, "Ce bouton ouvre le Générateur de fréquence. Touchez SUIVANT : l'application y va toute seule.", "generator"),
+        Step("generator", R.id.etFreq, "Tapez ici la fréquence voulue, par exemple 60 événements/min."),
+        Step("generator", R.id.btnPlay, "▶ démarre : la barre bleue glisse de gauche à droite avec un tic sonore à chaque événement."),
+        Step("generator", R.id.btnStop, "⬜ arrête le générateur et fige le chronomètre."),
+        Step("generator", R.id.btnNavCalc, "Ce bouton ouvre les Calculs automatiques. Touchez SUIVANT pour y aller.", "calc"),
+        Step("calc", R.id.calcList, "Voici la liste des calculs : Débit de perfusion, Débit de P.S.E., Débit de transfusion, Gestogramme, Score de Glasgow."),
+        Step("calc", R.id.btnNavInfo, "Ce bouton ouvre les Informations. Touchez SUIVANT pour y aller.", "info"),
+        Step("info", null, "Ici : toutes les fonctionnalités et les contacts cliquables de l'auteur (téléphone, e-mail, Facebook, GitHub). Tutoriel terminé !")
     )
 
     fun begin() {
@@ -47,13 +48,15 @@ object TutoManager {
     private fun show(activity: Activity) {
         clearViews()
         val step = steps[stepIndex]
-
         val target = step.targetId?.let { activity.findViewById<View>(it) }
+
+        // Voile transparent + cadre cyan + flèche
         val spot = SpotlightView(activity, target)
         spot.isClickable = true
         addView(activity, spot, FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
+        // Carte d'explication
         val card = LinearLayout(activity)
         card.orientation = LinearLayout.VERTICAL
         card.setBackgroundResource(R.drawable.bg_neon_card)
@@ -67,7 +70,18 @@ object TutoManager {
 
         val row = LinearLayout(activity)
         row.orientation = LinearLayout.HORIZONTAL
+        row.gravity = Gravity.CENTER_VERTICAL
         row.setPadding(0, dp(activity, 12), 0, 0)
+
+        val tvCount = TextView(activity)
+        tvCount.text = "${stepIndex + 1}/${steps.size}"
+        tvCount.setTextColor(Color.parseColor("#35DFFF"))
+        tvCount.textSize = 15f
+        tvCount.typeface = Typeface.DEFAULT_BOLD
+        row.addView(tvCount)
+
+        val spacer = View(activity)
+        row.addView(spacer, LinearLayout.LayoutParams(0, 0, 1f))
 
         val btnSkip = Button(activity)
         btnSkip.text = "Passer"
@@ -77,9 +91,11 @@ object TutoManager {
             active = false
             clearViews()
         }
+        row.addView(btnSkip, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT, dp(activity, 44)))
 
         val btnNext = Button(activity)
-        btnNext.text = if (stepIndex == steps.size - 1) "Terminer" else "Continuer"
+        btnNext.text = if (stepIndex == steps.size - 1) "Terminé" else "Suivant"
         btnNext.setTextColor(Color.WHITE)
         btnNext.setBackgroundResource(R.drawable.bg_button_gradient)
         btnNext.setOnClickListener {
@@ -102,20 +118,40 @@ object TutoManager {
                 show(activity)
             }
         }
+        val pNext = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, dp(activity, 44))
+        pNext.marginStart = dp(activity, 10)
+        row.addView(btnNext, pNext)
 
-        val pSkip = LinearLayout.LayoutParams(0, dp(activity, 46), 1f)
-        pSkip.marginEnd = dp(activity, 10)
-        row.addView(btnSkip, pSkip)
-        row.addView(btnNext, LinearLayout.LayoutParams(0, dp(activity, 46), 1f))
         card.addView(row)
 
-        val cardParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-        cardParams.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-        cardParams.leftMargin = dp(activity, 16)
-        cardParams.rightMargin = dp(activity, 16)
-        cardParams.bottomMargin = dp(activity, 96)
-        addView(activity, card, cardParams)
+        // Placement intelligent : la carte ne cache JAMAIS le bouton montré
+        val content = activity.findViewById<View>(android.R.id.content)
+        val params = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        params.leftMargin = dp(activity, 16)
+        params.rightMargin = dp(activity, 16)
+
+        if (target == null) {
+            params.gravity = Gravity.CENTER
+        } else {
+            val tLoc = IntArray(2)
+            target.getLocationOnScreen(tLoc)
+            val cLoc = IntArray(2)
+            content.getLocationOnScreen(cLoc)
+            val relTop = tLoc[1] - cLoc[1]
+            val relBottom = relTop + target.height
+
+            if (relBottom > content.height * 0.55) {
+                // Bouton en bas -> carte AU-DESSUS du bouton
+                params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                params.bottomMargin = content.height - relTop + dp(activity, 12)
+            } else {
+                // Bouton en haut -> carte EN-DESSOUS du bouton
+                params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+                params.topMargin = relBottom + dp(activity, 12)
+            }
+        }
+        addView(activity, card, params)
     }
 
     private fun addView(activity: Activity, v: View, params: FrameLayout.LayoutParams) {
