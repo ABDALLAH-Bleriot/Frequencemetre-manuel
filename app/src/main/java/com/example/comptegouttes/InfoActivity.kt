@@ -1,11 +1,15 @@
 package com.example.comptegouttes
 
 import android.content.Intent
-import android.graphics.Paint
-import android.net.Uri
+import android.graphics.Color
 import android.os.Bundle
 import android.view.GestureDetector
+import android.view.Gravity
 import android.view.MotionEvent
+import android.graphics.Paint
+import android.net.Uri
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -25,7 +29,6 @@ class InfoActivity : AppCompatActivity() {
         val tvFacebook = findViewById<TextView>(R.id.tvFacebook)
         val tvGithub = findViewById<TextView>(R.id.tvGithub)
 
-        // Soulignement pour montrer que c'est cliquable
         listOf(tvPhone1, tvPhone2, tvEmail, tvFacebook, tvGithub).forEach {
             it.paintFlags = it.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
@@ -35,6 +38,24 @@ class InfoActivity : AppCompatActivity() {
         tvEmail.setOnClickListener { sendEmail() }
         tvFacebook.setOnClickListener { openUrl("https://www.facebook.com/bleriot.abdallah") }
         tvGithub.setOnClickListener { openUrl("https://github.com/ABDALLAH-Bleriot/") }
+
+        // Bouton flottant pour revoir le tutoriel à tout moment
+        val btnTuto = Button(this)
+        btnTuto.text = "🎓 Tutoriel"
+        btnTuto.setTextColor(Color.WHITE)
+        btnTuto.setBackgroundResource(R.drawable.bg_button_gradient)
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            dp(48)
+        )
+        params.gravity = Gravity.BOTTOM or Gravity.END
+        params.bottomMargin = dp(112)
+        params.marginEnd = dp(16)
+        addContentView(btnTuto, params)
+        btnTuto.setOnClickListener {
+            TutoManager.begin()
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -42,7 +63,6 @@ class InfoActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    /** Ouvre le composeur téléphonique avec le numéro prêt à appeler. */
     private fun dial(number: String) {
         try {
             startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number")))
@@ -50,7 +70,6 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
-    /** Ouvre l'application email avec l'adresse déjà remplie. */
     private fun sendEmail() {
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:dragonbleu47@gmail.com")))
@@ -65,11 +84,12 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
-    /** Ouvre Facebook (app si installée) ou le navigateur internet. */
     private fun openUrl(url: String) {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } catch (_: Exception) {
         }
     }
+
+    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 }
