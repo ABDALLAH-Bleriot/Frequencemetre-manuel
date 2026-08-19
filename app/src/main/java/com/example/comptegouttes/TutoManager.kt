@@ -18,19 +18,25 @@ object TutoManager {
     private var stepIndex = 0
     private val shownViews = mutableListOf<View>()
 
-    data class Step(val screen: String, val targetId: Int?, val text: String, val goTo: String? = null)
+    data class Step(
+        val screen: String,
+        val targetId: Int?,
+        val text: String,
+        val goTo: String? = null,
+        val centerCard: Boolean = false
+    )
 
     private val steps = listOf(
-        Step("counter", R.id.btnTap, "Voici le bouton APPUYER ICI : touchez-le en rythme pour compter. Le résultat s'affiche toujours (ex : 1 appui /min, 1 appui / 2 min)."),
+        Step("counter", R.id.btnTap, "Appuyez ici en rythme à chaque fois que vous effectuez une action. L'application comptera vos appuis par minute."),
         Step("counter", R.id.btnReset, "RÉINITIALISER remet le compteur et le chronomètre à zéro."),
         Step("counter", R.id.btnNavGenerator, "Ce bouton ouvre le Générateur de fréquence. Touchez SUIVANT : l'application y va toute seule.", "generator"),
         Step("generator", R.id.etFreq, "Tapez ici la fréquence voulue, par exemple 60 événements/min."),
         Step("generator", R.id.btnPlay, "▶ démarre : la barre bleue glisse de gauche à droite avec un tic sonore à chaque événement."),
         Step("generator", R.id.btnStop, "⬜ arrête le générateur et fige le chronomètre."),
         Step("generator", R.id.btnNavCalc, "Ce bouton ouvre les Calculs automatiques. Touchez SUIVANT pour y aller.", "calc"),
-        Step("calc", R.id.calcList, "Voici la liste des calculs : Débit de perfusion, Débit de P.S.E., Débit de transfusion, Gestogramme, Score de Glasgow."),
+        Step("calc", R.id.calcList, "Voici la liste des calculs : Débit de perfusion, Débit de P.S.E. pour drogue vasoactive, Débit de transfusion, Gestogramme et Score de Glasgow. Touchez un bouton pour ouvrir.", null, true),
         Step("calc", R.id.btnNavInfo, "Ce bouton ouvre les Informations. Touchez SUIVANT pour y aller.", "info"),
-        Step("info", null, "Ici : toutes les fonctionnalités et les contacts cliquables de l'auteur (téléphone, e-mail, Facebook, GitHub). Tutoriel terminé !")
+        Step("info", null, "Ici : toutes les fonctionnalités et les contacts de l'auteur (téléphone, e-mail, Facebook, GitHub). Tutoriel terminé !")
     )
 
     fun begin() {
@@ -50,32 +56,34 @@ object TutoManager {
         val step = steps[stepIndex]
         val target = step.targetId?.let { activity.findViewById<View>(it) }
 
-        // Voile transparent + cadre cyan + flèche
+        // Voile + pointillés blancs autour du bouton
         val spot = SpotlightView(activity, target)
         spot.isClickable = true
         addView(activity, spot, FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
-        // Carte d'explication
+        // Carte BLANCHE (style de la photo)
         val card = LinearLayout(activity)
         card.orientation = LinearLayout.VERTICAL
-        card.setBackgroundResource(R.drawable.bg_neon_card)
-        card.setPadding(dp(activity, 16), dp(activity, 14), dp(activity, 16), dp(activity, 14))
+        card.setBackgroundResource(R.drawable.bg_tuto_card)
+        card.setPadding(dp(activity, 20), dp(activity, 18), dp(activity, 14), dp(activity, 10))
+        card.elevation = dp(activity, 10).toFloat()
 
         val tv = TextView(activity)
         tv.text = step.text
-        tv.setTextColor(Color.WHITE)
-        tv.textSize = 15f
+        tv.setTextColor(Color.parseColor("#555555"))
+        tv.textSize = 16f
+        tv.lineSpacingExtra = dp(activity, 4).toFloat()
         card.addView(tv)
 
         val row = LinearLayout(activity)
         row.orientation = LinearLayout.HORIZONTAL
         row.gravity = Gravity.CENTER_VERTICAL
-        row.setPadding(0, dp(activity, 12), 0, 0)
+        row.setPadding(0, dp(activity, 14), 0, 0)
 
         val tvCount = TextView(activity)
         tvCount.text = "${stepIndex + 1}/${steps.size}"
-        tvCount.setTextColor(Color.parseColor("#35DFFF"))
+        tvCount.setTextColor(Color.parseColor("#2196F3"))
         tvCount.textSize = 15f
         tvCount.typeface = Typeface.DEFAULT_BOLD
         row.addView(tvCount)
@@ -84,9 +92,10 @@ object TutoManager {
         row.addView(spacer, LinearLayout.LayoutParams(0, 0, 1f))
 
         val btnSkip = Button(activity)
-        btnSkip.text = "Passer"
-        btnSkip.setTextColor(Color.parseColor("#C7C9E4"))
-        btnSkip.setBackgroundResource(R.drawable.bg_chip_unselected)
+        btnSkip.text = "PASSER"
+        btnSkip.setTextColor(Color.parseColor("#777777"))
+        btnSkip.setBackgroundColor(Color.TRANSPARENT)
+        btnSkip.textSize = 14f
         btnSkip.setOnClickListener {
             active = false
             clearViews()
@@ -95,9 +104,10 @@ object TutoManager {
             LinearLayout.LayoutParams.WRAP_CONTENT, dp(activity, 44)))
 
         val btnNext = Button(activity)
-        btnNext.text = if (stepIndex == steps.size - 1) "Terminé" else "Suivant"
+        btnNext.text = if (stepIndex == steps.size - 1) "TERMINÉ" else "SUIVANT"
         btnNext.setTextColor(Color.WHITE)
-        btnNext.setBackgroundResource(R.drawable.bg_button_gradient)
+        btnNext.setBackgroundResource(R.drawable.bg_tuto_next)
+        btnNext.textSize = 14f
         btnNext.setOnClickListener {
             val goTo = step.goTo
             stepIndex++
@@ -119,19 +129,20 @@ object TutoManager {
             }
         }
         val pNext = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, dp(activity, 44))
-        pNext.marginStart = dp(activity, 10)
+        pNext.marginStart = dp(activity, 6)
         row.addView(btnNext, pNext)
 
         card.addView(row)
 
-        // Placement intelligent : la carte ne cache JAMAIS le bouton montré
+        // Placement : centrée si demandé (étape 8/10) ou si pas de cible,
+        // sinon au-dessus / en dessous du bouton sans jamais le cacher
         val content = activity.findViewById<View>(android.R.id.content)
         val params = FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        params.leftMargin = dp(activity, 16)
-        params.rightMargin = dp(activity, 16)
+        params.leftMargin = dp(activity, 24)
+        params.rightMargin = dp(activity, 24)
 
-        if (target == null) {
+        if (target == null || step.centerCard) {
             params.gravity = Gravity.CENTER
         } else {
             val tLoc = IntArray(2)
@@ -142,11 +153,9 @@ object TutoManager {
             val relBottom = relTop + target.height
 
             if (relBottom > content.height * 0.55) {
-                // Bouton en bas -> carte AU-DESSUS du bouton
                 params.gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
                 params.bottomMargin = content.height - relTop + dp(activity, 12)
             } else {
-                // Bouton en haut -> carte EN-DESSOUS du bouton
                 params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
                 params.topMargin = relBottom + dp(activity, 12)
             }
